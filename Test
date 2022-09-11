@@ -1,0 +1,23 @@
+import maya.cmds as cmds
+from animBot import OpenAnimBot as OA
+
+
+from functools import partial
+
+def scaleslider(slider, *args, **kwargs):
+
+    value = getSliderValue(slider)
+    OA.setSlider(OA.kScaleFromDefault, value)(value, **kwargs);
+
+def getSliderValue(ctrlName):
+    value = cmds.intSlider(ctrlName, q=True, value=True)
+    return value
+
+cmds.window()    
+cmds.columnLayout( adjustableColumn=True )                                                
+
+mySlider = cmds.intSlider(min=-100, max=100, value=0, step=1, dc = 'empty')
+
+cmds.intSlider(mySlider, e=True, dc = partial(scaleslider, mySlider, x=1))
+
+cmds.showWindow()
